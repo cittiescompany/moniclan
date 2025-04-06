@@ -282,7 +282,7 @@ const EighthHero = () => {
                 </p>
                 <strong>Nilmini M.</strong>
                 <p className="text-xl">
-                  Sent money from Canada to Sri Lanka with Remitly.
+                  Sent money from Canada to Sri Lanka with Moniclan.
                 </p>
               </div>
             </div>
@@ -296,7 +296,7 @@ const NinthHero = () => {
   return (
     <section className="bg-[#2C415A] p-10 flex flex-col items-center rounded-xl ">
       <h2 className="text-center text-white text-4xl font-bold py-2">
-        Beyond Borders: The Official Remitly Blog
+        Beyond Borders: The Official Moniclan Blog
       </h2>
       <main className=" mt-10 grid grid-cols-1 md:grid-cols-2 gap-10 px-3 md:px-36">
         {Array(4)
@@ -316,7 +316,7 @@ const NinthHero = () => {
               <div className="rounded-b-2xl border-2 border-[#ffff] py-14 px-2 ">
                 <b className="text-2xl text-white  ">
                   {index === 0
-                    ? "Today’s U.S. Dollar (USD) Exchange Rate with Remitly: Dollar to Peso and More"
+                    ? "Today’s U.S. Dollar (USD) Exchange Rate with Moniclan: Dollar to Peso and More"
                     : index === 1
                     ? "5 Top Online Banks in the U.S. (and 2 Popular Alternatives)"
                     : index === 2

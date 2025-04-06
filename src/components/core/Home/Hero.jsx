@@ -59,7 +59,7 @@ const Hero = () => {
         <div>
           <Card className="bg-white  mt-10 sm:mt-0 sm:w-[500px] shadow-inner py-11 relative mx-auto sm:mx-0  sm:top-[10%] flex flex-col gap-4 rounded-3xl px-6">
             <strong>You Send</strong>
-            <div className="flex h-[50px] text-[14px]  w-full items-center  rounded-lg border-2 border-gray-500 transition-all duration-150  ease-in-out">
+            <div className="flex h-[50px] gap-2 items-center">
               <Input
                 required=""
                 // className="bg-transparent  px-3 py-1 rounded-l-lg focus:outline-none w-full"

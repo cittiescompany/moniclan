@@ -70,7 +70,7 @@ const formatDate = (dateString) => {
 
      <div className='flex items-center gap-4 px-4'>
      <MdLock size={25} />
-     <p className='text-sm'>This information helps prevent fraud and makes Remitly safer. We keep it secure and confidential.</p>
+     <p className='text-sm'>This information helps prevent fraud and makes Moniclan safer. We keep it secure and confidential.</p>
      </div>
       </div>
       }
