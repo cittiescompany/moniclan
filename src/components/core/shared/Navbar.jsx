@@ -56,13 +56,13 @@ export default function App() {
 
       <NavbarContent className="sm:hidden " justify="">
         <NavbarBrand>
-          <p className="font-bold text-inherit text-3xl">Citties</p>
+          <p className="font-bold text-inherit text-3xl">Moniclan</p>
         </NavbarBrand>
       </NavbarContent>
 
       <NavbarContent className="hidden sm:flex !m-0 " justify="">
         <NavbarBrand>
-          <p className="font-bold text-inherit text-3xl mr-4">Citties</p>
+          <p className="font-bold text-inherit text-3xl mr-4">Moniclan</p>
         </NavbarBrand>
         <NavbarItem>
           <SelectCountries indacator="from" />
