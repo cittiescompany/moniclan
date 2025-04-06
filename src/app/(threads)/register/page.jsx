@@ -43,7 +43,7 @@ const Page = () => {
     <section className="flex py-11 flex-col items-center px-10 w-full h-screen">
       {/* <main className=" w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 "> */}
       <main className="w-full md:w-3/4">
-        {/* <h1 className="text-center text-5xl">Citties</h1> */}
+        {/* <h1 className="text-center text-5xl">Moniclan</h1> */}
         <form onSubmit={handleSubmit(submit)} className="mt-16">
           <h3 className="opacity-60 font-[Inter] font-bold text-blue-800 text-2xl my-4 text-center">
             Create an account
@@ -129,8 +129,8 @@ const Page = () => {
     {...register("phone", {
       required: "Phone number is required",
       pattern: {
-        value: /^0\d{10}$/,
-        message: "Enter a valid 11-digit Nigerian phone number starting with 0",
+        value: /^\+?[1-9]\d{7,14}$/, // Allows +1234567890 or 1234567890
+        message: "Please enter a valid phone number",
       },
     })}
   />
@@ -193,7 +193,7 @@ const Page = () => {
      </div>
          </div>
           <p className="mt-10 text-[1rem] opacity-60">
-            By using Citties, you agree to our E-sign Disclosure and Consent
+            By using Moniclan, you agree to our E-sign Disclosure and Consent
             Notice, Privacy Policy, and User Agreement.
           </p>
 

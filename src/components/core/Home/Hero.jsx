@@ -44,11 +44,11 @@ const Hero = () => {
       <div className="min-h-[110vh] grid grid-cols-1 sm:grid-cols-2  justify-center">
         <div className="flex flex-col items-center justify-center h-full">
           <div className="sm:w-2/3 flex flex-col items-center justify-center">
-            <h4 className="bg-[#862796] text-white px-4 py-3 text-xl">
+            <Button size="lg" radius="sm" color="primary" className="mb-4">
               New customer offer
-            </h4>
+            </Button>
             <strong className="text-4xl text-center">
-              Send money to {toCountry?.name} from the {fromCountry?.name}
+              Send money from {fromCountry?.name} to {toCountry?.name}
             </strong>
             <p className="text-xl  mt-4 text-center">
               Enjoy a special exchange rate on your first transfer, and no fees
@@ -60,9 +60,9 @@ const Hero = () => {
           <Card className="bg-white  mt-10 sm:mt-0 sm:w-[500px] shadow-inner py-11 relative mx-auto sm:mx-0  sm:top-[10%] flex flex-col gap-4 rounded-3xl px-6">
             <strong>You Send</strong>
             <div className="flex h-[50px] text-[14px]  w-full items-center  rounded-lg border-2 border-gray-500 transition-all duration-150  ease-in-out">
-              <input
+              <Input
                 required=""
-                className="bg-transparent  px-3 py-1 rounded-l-lg focus:outline-none w-full"
+                // className="bg-transparent  px-3 py-1 rounded-l-lg focus:outline-none w-full"
                 pattern="^[0-9,]*$"
                 id="currency-input"
                 name="text"
@@ -80,17 +80,17 @@ const Hero = () => {
               {[200, 500, 1000].map((item, index) => (
                 <Button
                   key={index}
-                  className="w-full h-[45px] rounded-2xl border-2 bg-white-100 shadow-sm transition-all duration-150  ease-in-out"
+                  className="w-full h-[45px] rounded-2xl border-1 bg-white-100 shadow-sm transition-all duration-150  ease-in-out"
                 >
                   {item} {fromCountry?.currencyCode}
                 </Button>
               ))}
             </div>
             <strong>They receive</strong>
-            <div className="flex h-[50px] text-[14px]  w-full items-center  rounded-lg border-2 border-gray-500 transition-all duration-150  ease-in-out">
-              <input
+            <div className="flex h-[50px] gap-2 items-center">
+              <Input
                 required=""
-                className="bg-transparent  px-3 py-1 rounded-l-lg focus:outline-none w-full"
+                // className="bg-transparent  px-3 py-1 rounded-l-lg focus:outline-none w-full"
                 pattern="^[0-9,]*$"
                 id="currency-input"
                 name="text"
@@ -118,7 +118,7 @@ const Hero = () => {
                 </span>
               </div>
             </div>
-            <Button className="w-[85%] mx-auto mt-5 h-[50px] bg-primary-800 rounded-lg hover:bg-primary-600 text-lg text-white">
+            <Button size="lg" radius="sm" color="primary">
               Get this rate
             </Button>
           </Card>

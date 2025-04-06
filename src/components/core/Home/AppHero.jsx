@@ -90,7 +90,7 @@ export const FourthHero = () => {
   return (
     <section className=" bg-white p-10 flex flex-col items-center ">
       <h2 className="text-center text-[#2C415A] text-4xl font-bold py-2">
-        Where to send money in Nigeria with Citties
+        Where to send money in Nigeria with Moniclan
       </h2>
       <p className="text-center text-xl">
         Cash pickup and bank deposit with our trusted network in Nigeria. Click
@@ -118,7 +118,7 @@ export const FourthHero = () => {
       </Button>
       <p className="text-base mt-3">
         Trademarks, trade names and logos displayed are registered trademarks of
-        their respective owners. No affiliation or endorsement of Citties should
+        their respective owners. No affiliation or endorsement of Moniclan should
         be implied.
       </p>
     </section>
@@ -169,7 +169,7 @@ const SixthHero = () => {
   return (
     <section className="bg-[#D3EAEC]  py-16 ">
       <h2 className="text-center text-[#2C415A]  text-4xl font-bold py-2">
-        How to send money to Nigeria with Citties
+        How to send money to Nigeria with Moniclan
       </h2>
       <main className="flex px-8 sm:px-24 gap-8 flex-col md:flex-row mt-5">
         <div className="gap-2 flex flex-col ">
@@ -338,7 +338,7 @@ export const Footer = () => {
     <section className="mt-5  bg-[#2C415A] p-10 rounded-t-xl ">
    <div className="lg:max-w-[80rem] mx-auto grid grid-cols-2 justify-center gap-10 md:grid-cols-3 lg:grid-cols-4">
    <div>
-        <h2 className="text-white text-3xl">Citties</h2>
+        <h2 className="text-white text-3xl">Moniclan</h2>
         <div className="flex flex-col">
           {[
             "User Agreement",

@@ -6,7 +6,7 @@ const SecondHero = () => {
   return (
     <section className="p-3 sm:p-20 flex flex-col gap-10 items-center justify-center">
       <h1 className="font-semibold text-3xl text-center ">
-        Find out why millions worldwide trust Citties
+        Find out why millions worldwide trust Moniclan
       </h1>
       <div className="grid sm:grid-cols-3 gap-10">
         {[1, 1, 3].map((_, index) => (

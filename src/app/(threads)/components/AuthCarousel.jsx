@@ -13,7 +13,7 @@ export default function Carousel({swiperRef,intervalDelay}) {
     return (
         <div className="relative w-full h-full">
           {/* Background Overlay */}
-          <div className="absolute top-0 left-0 w-full h-full bg-blue-800 opacity-50 z-10"></div>
+          <div className="absolute top-0 left-0 w-full h-full z-10"></div>
     
           <Swiper
         onSwiper={(swiper) => (swiperRef.current = swiper)} // Store Swiper instance

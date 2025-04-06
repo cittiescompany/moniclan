@@ -32,15 +32,15 @@ const Layout = ({ children }) => {
     <RequiredNoAuth>
       <div className="flex flex-col md:flex-row-reverse w-full min-h-screen">
         <div className="md:w-1/2">
-          <div className="pattern-4 relative flex h-full flex-col overflow-hidden rounded-b-2xl md:rounded-br-none md:rounded-l-2xl bg-blue-800 text-white py-12 px-8 md:p-0">
+          <div className="pattern-4 relative flex h-full flex-col overflow-hidden rounded-b-2xl md:rounded-br-none md:rounded-l-2xl text-white py-12 px-8 md:p-0">
             {/* <Link href="/" className="mb-10 flex items-center text-[1.6rem] md:mb-16">
               <img src="/images/ccbs.png" width='80' alt="Logo here"/>
             </Link> */}
             <Carousel swiperRef={swiperRef} intervalDelay={intervalDelay} />
-            <div className="hidden absolute inset-0 z-[99] md:flex items-center justify-center w-full">
-              <p className="text-2xl text-center !leading-snug text-slate-300 md:text-[2.9rem] font-extrabold">
-                Moniclan Cross Border Management
-              </p>
+            <div className="hidden absolute inset-0 z-[99] md:flex top-6 justify-center w-full">
+            <p className="text-2xl text-center !leading-snug text-slate-300 md:text-[2.9rem] font-extrabold">
+             Moniclan Cross Border Management
+            </p>
             </div>
             <p className="md:hidden text-2xl text-center !leading-snug text-slate-300 md:text-[2.9rem] font-extrabold">
             Moniclan Cross Border Management

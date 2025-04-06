@@ -5,7 +5,7 @@ const useTransaction = create(
   persist(
     (set) => ({
       data: {
-        from:3,
+        from:2,
         to:4,
       },
       updateData: (payload) => set((state) => ({ data: { ...state.data, ...payload } })),

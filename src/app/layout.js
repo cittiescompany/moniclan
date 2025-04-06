@@ -7,8 +7,8 @@ import { Toaster } from "react-hot-toast";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: 'Citties Payment Card',
-  description: 'Citties - Making payments easy',
+  title: 'Moniclan Payment Card',
+  description: 'Moniclan - Making payments easy',
 };
 
 export default function RootLayout({ children }) {
