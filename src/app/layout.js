@@ -7,7 +7,7 @@ import { Toaster } from "react-hot-toast";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: 'Moniclan Payment Card',
+  title: 'Moniclan',
   description: 'Moniclan - Making payments easy',
 };
 

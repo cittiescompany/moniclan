@@ -1,9 +1,11 @@
 "use client";
-import React, { useState } from "react";
-import { Button, Card, Input } from "@nextui-org/react";
+import React, { useEffect, useMemo, useState } from "react";
+import { Button, Card, Input, Spinner } from "@nextui-org/react";
 import countries from "@/lib/countries";
 import { useShallow } from "zustand/react/shallow";
-import useTransaction from "@/store/Global";
+import useTransaction, { useDataStore } from "@/store/Global";
+import axios from "axios";
+import { formatCurrency } from "@/lib/utils";
 
 const formatNumber = (value) => {
   const parts = value.split(".");
@@ -15,10 +17,59 @@ const formatNumber = (value) => {
 
 const countriesData = countries;
 const Hero = () => {
+  const [loading, setLoading] = useState(false)
+  const [selectedIndex, setSelectedIndex] = useState(0)
   const [to, from, updateData] = useTransaction(
     useShallow((state) => [state.data.to, state.data.from, state.updateData])
   );
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState(100);
+  const [convertedAmount, setConvertedAmount] = useState(0)
+  const [exchangeRate, setExchangeRate] = useState(0)
+    const {data:storeData,updateData:updateStoreData}=useDataStore()
+
+    useEffect(() => {
+      const getData=async()=>{
+        const result = await handleCalculate(amount??0);
+        setConvertedAmount(result);
+      }
+      
+      getData()
+    }, [amount]);
+
+    useEffect(() => {
+      const getData=async()=>{
+        const result = await handleCalculate(1);
+        setExchangeRate(result);
+      }
+      
+      getData()
+    }, [to, from]);
+    
+
+
+  
+  const handleCalculate = async (amount) => {
+      try {
+        setLoading(true)
+        const response = await axios.get("https://dashboard-backend-hazel-five.vercel.app/api/get-rate", {
+          params: { fromCountryCode: countries[from]?.code, toCountryCode: countries[to]?.code },
+        });
+        
+        if (response.data) {
+          const exchangeRate = response.data.rate;
+          const calculatedAmount = parseFloat(amount) * exchangeRate;
+          setLoading(false)
+          return calculatedAmount.toFixed(2);
+        } else {
+          setLoading(false)
+          console.log("Exchange rate not found");
+        }
+      } catch (error) {
+        console.log("Error fetching exchange rate");
+        setLoading(false)
+      }
+    };
+
 
   const handleChange = (event) => {
     const value = event.target.value;
@@ -27,21 +78,26 @@ const Hero = () => {
     setAmount(formattedValue);
   };
 
+  const handleSelect = (item, index) => {
+    setAmount(item);
+    setSelectedIndex(index);
+  }
+
   const fromCountry = countriesData[from];
   const toCountry = countriesData[to];
 
-  const handleKeyDown = (event) => {
-    if (
-      event.key === "ArrowUp" ||
-      event.key === "ArrowDown" ||
-      event.key === "e"
-    ) {
-      event.preventDefault();
-    }
-  };
+  // const handleKeyDown = (event) => {
+  //   if (
+  //     event.key === "ArrowUp" ||
+  //     event.key === "ArrowDown" ||
+  //     event.key === "e"
+  //   ) {
+  //     event.preventDefault();
+  //   }
+  // };
   return (
-    <section className=" bg-[#D3EAEC]">
-      <div className="min-h-[110vh] grid grid-cols-1 sm:grid-cols-2  justify-center">
+    <section className=" bg-[#D3EAEC] pt-20">
+      <div className="grid grid-cols-1 sm:grid-cols-2 items-center  justify-center">
         <div className="flex flex-col items-center justify-center h-full">
           <div className="sm:w-2/3 flex flex-col items-center justify-center">
             <Button size="lg" radius="sm" color="primary" className="mb-4">
@@ -68,8 +124,6 @@ const Hero = () => {
                 name="text"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                onKeyDown={handleChange}
-                onWheel={(e) => e.currentTarget.blur()}
                 type="text"
                 placeholder="1,234,567.89"
               />
@@ -77,10 +131,11 @@ const Hero = () => {
             </div>
             <p className="">Or select an amount</p>
             <div className="grid grid-cols-3 sm:grid-cols-4 sm:gap-3 gap-1">
-              {[200, 500, 1000].map((item, index) => (
+              {[100,200, 500, 1000].map((item, index) => (
                 <Button
                   key={index}
-                  className="w-full h-[45px] rounded-2xl border-1 bg-white-100 shadow-sm transition-all duration-150  ease-in-out"
+                  onPress={() => handleSelect(item, index)}
+                  className={`${selectedIndex==index?'bg-gray-100':'bg-white'} w-full h-[45px] rounded-2xl border shadow-sm transition-all duration-150  ease-in-out`}
                 >
                   {item} {fromCountry?.currencyCode}
                 </Button>
@@ -94,20 +149,19 @@ const Hero = () => {
                 pattern="^[0-9,]*$"
                 id="currency-input"
                 name="text"
-                onKeyDown={handleKeyDown}
-                onWheel={(e) => e.currentTarget.blur()}
-                type="number"
+                readOnly
+                type="text"
+                value={loading?'Please wait...':formatCurrency(countries[to]?.currencyCode,convertedAmount)}
                  placeholder="1,234,567.89"
               />
               <span className="mr-2">{toCountry?.currencyCode}</span>
             </div>
             <div>
               <p className="text-[#862796]">Special rate</p>
-              <strong>
-                <span>1 {fromCountry?.currencyCode}</span> = 300.00{" "}
-                {toCountry?.currencyCode}
-              </strong>
-              <div className="mt-3 flex flex-col gap-2">
+              <div>
+              <span className="font-bold">{formatCurrency(countries[from]?.currencyCode,1)}</span> = <span className="font-bold">{loading?<Spinner size="sm" color="primary" />:!loading&&amount==0?'Not available':formatCurrency(countries[to]?.currencyCode,exchangeRate)}</span> 
+              </div>
+              {/* <div className="mt-3 flex flex-col gap-2">
                 <span className="flex justify-between font-bold ">
                   <span>Fee</span>
                   <span className="text-primary-600 ">Zero fees</span>
@@ -116,11 +170,11 @@ const Hero = () => {
                   <span>Total cost</span>
                   <span>100.00 USD</span>
                 </span>
-              </div>
+              </div> */}
             </div>
-            <Button size="lg" radius="sm" color="primary">
+            {/* <Button size="lg" radius="sm" color="primary">
               Get this rate
-            </Button>
+            </Button> */}
           </Card>
         </div>
       </div>

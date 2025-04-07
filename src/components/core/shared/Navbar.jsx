@@ -24,6 +24,7 @@ import Link from 'next/link'
 import CountryFlag from "@/components/ui/CountryFlag";
 import { useShallow } from "zustand/react/shallow";
 import useTransaction from "@/store/Global";
+import { FaHandPointer } from "react-icons/fa";
 
 export default function App() {
   const menuItems = [
@@ -96,9 +97,14 @@ export default function App() {
       </NavbarContent>
 
       <NavbarContent justify="" className=" ">
-        <NavbarItem className="hidden lg:flex px-3 py-2 rounded-md border-2 border-[#2c5e9b]">
-          <Link href="/login">Login</Link>
-        </NavbarItem>
+    <NavbarItem className="hidden lg:flex px-3 py-2 rounded-md border-2 border-[#2c5e9b]">
+      <div className="relative">
+    <div className="absolute -bottom-10 -left-8 -translate-x-1/2 animate-bounce z-10">
+    <FaHandPointer size={25} className="rotate-45 text-gray-600" />
+    </div>
+  </div>
+      <Link href="/login">Login</Link>
+    </NavbarItem>
         <NavbarItem>
           <Button
             as={Link}
