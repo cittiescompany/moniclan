@@ -5,7 +5,7 @@ import countries from "@/lib/countries";
 import { useShallow } from "zustand/react/shallow";
 import useTransaction, { useDataStore } from "@/store/Global";
 import axios from "axios";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, notifier } from "@/lib/utils";
 
 const formatNumber = (value) => {
   const parts = value.split(".");
@@ -25,48 +25,56 @@ const Hero = () => {
   const [amount, setAmount] = useState(100);
   const [convertedAmount, setConvertedAmount] = useState(0)
   const [exchangeRate, setExchangeRate] = useState(0)
-    const {data:storeData,updateData:updateStoreData}=useDataStore()
+  const fromCountry = countriesData[from];
+  const toCountry = countriesData[to];
 
     useEffect(() => {
       const getData=async()=>{
         const result = await handleCalculate(amount??0);
+        
         setConvertedAmount(result);
       }
       
       getData()
-    }, [amount]);
+    }, [amount,from, to]);
+
 
     useEffect(() => {
       const getData=async()=>{
         const result = await handleCalculate(1);
+        console.log("result: " + result);
         setExchangeRate(result);
       }
       
       getData()
-    }, [to, from]);
+    }, [to, from,]);
+    
     
 
 
   
   const handleCalculate = async (amount) => {
       try {
+        console.log("from",from)
+        console.log("To",to)
         setLoading(true)
         const response = await axios.get("https://dashboard-backend-hazel-five.vercel.app/api/get-rate", {
-          params: { fromCountryCode: countries[from]?.code, toCountryCode: countries[to]?.code },
+          params: { fromCountryCode: fromCountry?.code, toCountryCode: toCountry?.code },
         });
-        
-        if (response.data) {
+        console.log('response:',response);
+        if (response.status === 200) {
           const exchangeRate = response.data.rate;
           const calculatedAmount = parseFloat(amount) * exchangeRate;
           setLoading(false)
           return calculatedAmount.toFixed(2);
         } else {
           setLoading(false)
-          console.log("Exchange rate not found");
+          return 0;
         }
-      } catch (error) {
-        console.log("Error fetching exchange rate");
+      } catch (err) {
+        // notifier({message:err.response.data.error,type:'error'});
         setLoading(false)
+     return 0;
       }
     };
 
@@ -83,8 +91,8 @@ const Hero = () => {
     setSelectedIndex(index);
   }
 
-  const fromCountry = countriesData[from];
-  const toCountry = countriesData[to];
+
+
 
   // const handleKeyDown = (event) => {
   //   if (
@@ -158,9 +166,11 @@ const Hero = () => {
             </div>
             <div>
               <p className="text-[#862796]">Special rate</p>
-              <div>
-              <span className="font-bold">{formatCurrency(countries[from]?.currencyCode,1)}</span> = <span className="font-bold">{loading?<Spinner size="sm" color="primary" />:!loading&&amount==0?'Not available':formatCurrency(countries[to]?.currencyCode,exchangeRate)}</span> 
-              </div>
+           {!loading&&exchangeRate==0? <div>
+            <p>No exchange rate available between {fromCountry?.name} and {toCountry?.name}</p>
+           </div> : <div>
+              <span className="font-bold">{formatCurrency(countries[from]?.currencyCode,1)}</span> = <span className="font-bold">{loading?<Spinner size="sm" color="primary" />:formatCurrency(countries[to]?.currencyCode,exchangeRate)}</span> 
+              </div>}
               {/* <div className="mt-3 flex flex-col gap-2">
                 <span className="flex justify-between font-bold ">
                   <span>Fee</span>

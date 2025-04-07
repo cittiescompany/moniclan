@@ -38,13 +38,14 @@ const data = [
   },
 ];
 const Page = () => {
-  const [loading, setloading] = useState(false)
+  const [loading, setLoading] = useState(false)
   const {data:storeData,updateData:updateStoreData}=useDataStore()
   const router = useRouter();
   const [to, from] = useTransaction(
     useShallow((state) => [state.data.to, state.data.from])
   );
-
+  const fromCountry = countriesData[from];
+  const toCountry = countriesData[to];
     
    useEffect(() => {
       const getData=async()=>{
@@ -55,7 +56,7 @@ const Page = () => {
 
       getData()
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [toCountry,fromCountry]);
 
     // const fetchConvertedAmount = async (num) => {
     //   if (!num) return;
@@ -76,23 +77,26 @@ const Page = () => {
   
     const handleCalculate = async (amount) => {
       try {
-        setloading(true)
+        console.log("from",from)
+        console.log("To",to)
+        setLoading(true)
         const response = await axios.get("https://dashboard-backend-hazel-five.vercel.app/api/get-rate", {
-          params: { fromCountryCode: countries[from]?.code, toCountryCode: countries[to]?.code },
+          params: { fromCountryCode: fromCountry?.code, toCountryCode: toCountry?.code },
         });
-        
-        if (response.data) {
+        console.log('response:',response);
+        if (response.status === 200) {
           const exchangeRate = response.data.rate;
           const calculatedAmount = parseFloat(amount) * exchangeRate;
-          setloading(false)
+          setLoading(false)
           return calculatedAmount.toFixed(2);
         } else {
-          setloading(false)
-          console.log("Exchange rate not found");
+          setLoading(false)
+          return 0;
         }
-      } catch (error) {
-        console.log("Error fetching exchange rate");
-        setloading(false)
+      } catch (err) {
+        // notifier({message:err.response.data.error,type:'error'});
+        setLoading(false)
+     return 0;
       }
     };
     return (
@@ -145,9 +149,11 @@ const Page = () => {
               </div>
               <div>
                 <div className="opacity-55">Exchange Rate</div>
-                <div className="font-bold font-Inter mt-2">
-                {formatCurrency(countries[from]?.currencyCode,1)} = {formatCurrency(countries[to]?.currencyCode,storeData?.exchangeRate)}
-                </div>
+                {!loading&&storeData?.exchangeRate==0? <div>
+            <p>No exchange rate available between {fromCountry?.name} and {toCountry?.name}</p>
+           </div> : <div className="mt-2">
+              <span className="font-bold">{formatCurrency(countries[from]?.currencyCode,1)}</span> = <span className="font-bold">{loading?<Spinner size="sm" color="primary" />:formatCurrency(countries[to]?.currencyCode,storeData?.exchangeRate)}</span> 
+              </div>}
                 <button
                   onClick={() => router.push("/home/transfer")}
                   className="bg-[#BAD477] w-full text-white py-2 px-1 transition-all hover:scale-105 my-5 rounded-3xl"

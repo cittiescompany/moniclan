@@ -4,14 +4,14 @@ import { Button, Progress, Input, Popover, PopoverTrigger, PopoverContent, Selec
 import countries from "@/lib/countries";
 import CountryFlag from "@/components/ui/CountryFlag";
 import CurrencyConverter from './CurrencyConverter'
-import { cn, formatCurrency } from '@/lib/utils';
+import { cn, formatCurrency, notifier } from '@/lib/utils';
 import useTransaction, { useDataStore } from '@/store/Global';
 import { useShallow } from 'zustand/react/shallow';
 import axios from 'axios';
 
 
 const TransferAmount = ({goNext,editMode}) => {
-   const [loading, setloading] = useState(false)
+   const [loading, setLoading] = useState(false)
   const {data,updateData}=useDataStore()
   const [to, from] = useTransaction(
     useShallow((state) => [state.data.to, state.data.from])
@@ -33,11 +33,10 @@ const TransferAmount = ({goNext,editMode}) => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data.amount, from, to]);
 
-
     useEffect(() => {
       updateData({from:countries[from]?.currencyCode,to:countries[to]?.currencyCode});
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [ from, to])
+    }, [from, to])
     
 
 
@@ -52,27 +51,27 @@ const TransferAmount = ({goNext,editMode}) => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [from, to]);
   
-    const fetchConvertedAmount = async (num) => {
-      if (!num) return;
-      if (selectedMethod=='mannual') {
-        const convertedAmount=exchangeRate*num
-        return convertedAmount
-      }else{
-        try {
-          const response = await fetch(
-            `/api/convert?amount=${num}&from=${countries[from]?.currencyCode}&to=${countries[to]?.currencyCode}`
-          );
-          const data = await response.json();
+    // const fetchConvertedAmount = async (num) => {
+    //   if (!num) return;
+    //   if (selectedMethod=='mannual') {
+    //     const convertedAmount=exchangeRate*num
+    //     return convertedAmount
+    //   }else{
+    //     try {
+    //       const response = await fetch(
+    //         `/api/convert?amount=${num}&from=${countries[from]?.currencyCode}&to=${countries[to]?.currencyCode}`
+    //       );
+    //       const data = await response.json();
           
           
-          return data?.convertedAmount;
-          // setConvertedAmount(data.convertedAmount?.toFixed(2) || "Error");
-        } catch (error) {
-          console.error("Conversion Error:", error);
-        }
-      }
+    //       return data?.convertedAmount;
+    //       // setConvertedAmount(data.convertedAmount?.toFixed(2) || "Error");
+    //     } catch (error) {
+    //       console.error("Conversion Error:", error);
+    //     }
+    //   }
   
-    };
+    // };
 
     // const fetchExchangeRate = async (num) => {
     //   if (!num) return;
@@ -93,31 +92,32 @@ const continuePayment=()=>{
 goNext()
 }
 
-const handleSelect = (e)=>{
-  setselectedMethod(e.currentKey)
-}
+// const handleSelect = (e)=>{
+//   setselectedMethod(e.currentKey)
+// }
 
 const handleCalculate = async (amount) => {
   console.log('from:',countries[from],'to:',countries[to])
   try {
-    setloading(true)
+    setLoading(true)
     const response = await axios.get("https://dashboard-backend-hazel-five.vercel.app/api/get-rate", {
       params: { fromCountryCode: countries[from]?.code, toCountryCode: countries[to]?.code },
     });
     console.log("response:",response);
     
-    if (response.data) {
+    if (response.statusCode === 200) {
       const exchangeRate = response.data.rate;
       const calculatedAmount = parseFloat(amount) * exchangeRate;
-      setloading(false)
+      setLoading(false)
       return calculatedAmount.toFixed(2);
     } else {
-      setloading(false)
-      console.log("Exchange rate not found");
+      setLoading(false)
+      return 0
     }
   } catch (error) {
-    setloading(false)
-    console.log("Error fetching exchange rate");
+      //  notifier({message:err.response.data.error,type:'error'});
+            setLoading(false)
+         return 0;
   }
 };
 
@@ -211,6 +211,9 @@ const handleCalculate = async (amount) => {
       </div>
       <div className="bg-white p-6  my-3 rounded-sm">
         <p className="text-lg">Current exchange rate</p>
+     { !loading&&data.exchangeRate==0? <div>
+            <p>No exchange rate available between {countries[from]?.name} and {countries[to]?.name}</p>
+           </div> :   <div>
         {loading? <div className="h-[3rem] flex items-center justify-center">
             <Spinner color="primary" />
             </div>:
@@ -219,6 +222,7 @@ const handleCalculate = async (amount) => {
           {formatCurrency(countries[from]?.currencyCode,1)} = {formatCurrency(countries[to]?.currencyCode,data.exchangeRate)}
         </strong>
             }
+        </div>}
       </div>
       <hr className="border-2 w-[98%] block mx-auto" />
       <button className="bg-gray-300  p-4 w-[98%] rounded-sm mt-3 mx-auto block ">

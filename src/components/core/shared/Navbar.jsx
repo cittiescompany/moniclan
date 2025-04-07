@@ -187,7 +187,7 @@ const SelectCountries = ({ indacator }) => {
             index === (indacator === "from" ? to : from) ? null : (
               <Button
                 key={index}
-                onClick={() => updateData({ [indacator]: index })}
+                onPress={() => updateData({ [indacator]: index })}
                 className={cn(
                   "flex flex-col h-11 gap-1 items-stretch rounded-md hover:bg-primary-500 hover:text-white",
                   { "border-2 border-primary-500": data === index }
